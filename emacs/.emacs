@@ -12,9 +12,9 @@
 		(indent-according-to-mode))
 	(insert "{}")
 	(backward-char)))
-	(add-hook 'c-mode-common-hook 'my-c-common-hook)
-	(defun my-c-common-hook ()
-		(define-key c-mode-base-map "{" 'autocierredellaves))
+(add-hook 'c-mode-common-hook 'my-c-common-hook)
+(defun my-c-common-hook ()
+	(define-key c-mode-base-map "{" 'autocierredellaves))
 ;////////////////////////////////////////////////////////////////////
 
 ;//////////////////////// Auto cerrar llaves ////////////////////////
@@ -31,8 +31,8 @@
 		(define-key c-mode-base-map "\"" 'electric-pair)
 		(define-key c-mode-base-map "\'" 'electric-pair)
 		(define-key c-mode-base-map "(" 'electric-pair)
-			(define-key c-mode-base-map "[" 'electric-pair)
-			(define-key c-mode-base-map "{" 'electric-pair)))
+		(define-key c-mode-base-map "[" 'electric-pair)
+		(define-key c-mode-base-map "{" 'electric-pair)))
 ;////////////////////////////////////////////////////////////////////
 
 ;/////// Autocompletar con shif + tab para saltar opciones //////////
@@ -73,9 +73,9 @@
 ;////////////////////////////////////////////////////////////////////
 
 ;////////////////////  Resaltar la linea actual  ////////////////////
-(defface hl-line '((t (:background "Gray10")))		;;Cambiar
+(defface hl-line '((t (:background "Gray10")))      ;;Cambiar
   "Face to use for `hl-line-face'." :group 'hl-line);;de
-(setq hl-line-face 'hl-line)						;;color
+(setq hl-line-face 'hl-line)                        ;;color
 (global-hl-line-mode t)								
 ;////////////////////////////////////////////////////////////////////
 
@@ -87,3 +87,45 @@
 ;/////////////////  Poner el fondo en color #121212 /////////////////
 (set-background-color "#121212")
 ;////////////////////////////////////////////////////////////////////
+
+(defun compilaryejecutar()
+  (interactive)
+  (setq archivo (file-name-nondirectory(buffer-file-name)))
+  (save-buffer)
+  (setq compilador "g++")
+  (setq ejecutar "./a.out")
+  (compile (format "%s %s && %s" compilador archivo ejecutar))
+)
+(global-set-key [f5] 'compilaryejecutar)
+
+(defun dividirBuffer()
+  (interactive)
+  (delete-other-windows)
+  (split-window-horizontally)
+  (switch-to-buffer-other-window "entrada")
+;;  (insert-file-contents "entrada");;si es que existe
+  (split-window-vertically)
+  (switch-to-buffer-other-window "salida")
+  (switch-to-buffer-other-window "entrada")
+  (set-window-dedicated-p (selected-window) t)
+  (switch-to-buffer-other-window "salida")
+  (set-window-dedicated-p (selected-window) t)
+  (other-window 1)
+)
+(global-set-key [f6] 'dividirBuffer)
+(defun icpcmode ()
+  (interactive)
+  (setq codigofuente (file-name-nondirectory(buffer-file-name)))
+  (save-buffer)
+  (switch-to-buffer-other-window "entrada")
+  (write-file "entrada")
+  (switch-to-buffer-other-window "salida")
+  (compilation-mode)
+  (switch-to-buffer-other-window codigofuente)
+  (setq compilador "g++")
+  (setq ejecutar "./a.out < entrada")
+  (shell-command 
+   (format "%s %s && %s" compilador codigofuente ejecutar)
+   "salida" "salida")
+)
+(global-set-key [f7] 'icpcmode)
