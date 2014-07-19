@@ -85,7 +85,7 @@
 ;////////////////////////////////////////////////////////////////////
 
 ;/////////////////  Poner el fondo en color #121212 /////////////////
-(set-background-color "#121212")
+;(set-background-color "#121212")
 ;////////////////////////////////////////////////////////////////////
 
 (defun compilaryejecutar()
@@ -122,7 +122,7 @@
   (switch-to-buffer-other-window "salida")
   (compilation-mode)
   (switch-to-buffer-other-window codigofuente)
-  (setq compilador "g++")
+  (setq compilador "g++ -g -O2 -std=gnu++0x -static")
   (setq ejecutar "./a.out < entrada")
   (shell-command 
    (format "%s %s && %s" compilador codigofuente ejecutar)
