@@ -44,7 +44,6 @@ struct TwoSat {
     for (int i = 0; i < n; i += 2)
     	res[i / 2] = comp[i] > comp[i ^ 1];
     return res;
-
   }
 } ts;
 
