@@ -1,0 +1,48 @@
+Divisibilidad por 2
+Un número es divisible por 2, si termina en cero o cifra par.
+Divisibilidad por 3
+Un número es divisible por 3, si la suma de sus dígitos es múltiplo de 3.
+Ejemplo:
+564   5 + 6 + 4 = 15  15 es múltiplo de 3
+2 040  2 + 0 + 4 + 0 = 6   6 es múltiplo de 3
+Divisibilidad por 4
+Un número es divisible por 4, si sus dos últimas cifras son ceros o múltiplo de 4.
+Ejemplo: 36, 400, 1 028, ...
+
+Divisibilidad por 5
+Un número es divisible por 5, si termina en cero o cinco.
+Ejemplo: 45, 515, 7 525, 230, ...
+Divisibilidad por 6
+Un número es divisible por 6, si es divisible por 2 y por 3.
+Ejemplo: 72, 324, 2 400, ...
+Divisibilidad por 7
+Un número es divisible por 7 cuando la diferencia entre el número sin la cifra de las unidades y el doble de la cifra de las unidades es 0 ó un múltiplo de 7.
+Ejemplo:
+343   34 − 2 • 3 = 28  28 es múltiplo de 7
+105   10 − 5 • 2 = 0
+2 261   226 − 1 • 2 = 224 
+Se repite el proceso con 224  22 − 4 • 2 = 14  14 es múltiplo de 7
+Divisibilidad por 8
+Un número es divisible por 8, si sus tres últimas cifras son ceros o múltiplo de 8.
+Ejemplo: 4 000, 1 048, 1 512, ...
+Divisibilidad por 9
+Un número es divisible por 9, si la suma de sus dígitos es múltiplo de 9.
+Ejemplo:
+81  8 + 1 = 9
+3 663  3 + 6 + 6 + 3 = 18   18 es múltiplo de 9
+Divisibilidad por 10
+Un número es divisible por 10, si la cifra de las unidades es 0.
+Ejemplo: 130, 1 440, 10 230, ...
+
+Divisibilidad por 11
+Un número es divisible por 11, si la diferencia entre la suma de las cifras que ocupan los lugares impares y la de los pares es 0 o un múltiplo de 11 .
+Ejemplo:
+121  (1 + 1) − 2 = 0
+4224  (4 + 2) − (2 + 4) = 0
+Divisibilidad por 25
+Un número es divisible por 25, si sus dos últimas cifras son ceros o múltiplo de 25.
+Ejemplo: 500, 1 025, 1 875, ...
+Divisibilidad por 125
+Un número es divisible por 125, si sus tres últimas cifras son ceros o múltiplo de 125.
+Ejemplo: 1 000, 1 125, 4 250, ...
+

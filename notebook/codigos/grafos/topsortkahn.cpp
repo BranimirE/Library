@@ -26,7 +26,7 @@ vector<int> topsort() {
     for (int v: g[u]) {
       gradoin[v]--;
       if (gradoin[v] == 0)
-	q.push(v);
+	  q.push(v);
     }
   }
   return ts;
