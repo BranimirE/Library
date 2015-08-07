@@ -1,0 +1,215 @@
+Cuidado con arcos negativos (Danger!!! Malicious!!! Warning!!)
+==============================================================
+Dijkstra FUNCIONA si el grafo tiene ARCOS con pesos NEGATIVOS.
+PERO NO si el grafo tiene CICLOS NEGATIVOS.
+
+Es muy riesgoso lanzar dijkstra en un grafo que tiene pesos
+negativos si en el statement no te asegura que no tendra ciclos
+negativos. (RTE/TLE alert!!!).
+Es MEJOR CALMARSE y revisar si tal vez se resuelve con
+Bellman Ford(revisar los limites del problema), tal vez solo te
+pide la distancia a los nodos con distancia correcta(que no estan
+en ciclos negativos)
+
+
+Implementación de dijkstra con vector de terminados/marcados
+============================================================
+Existen algunas implementaciones de dijkstra en la que se usa
+un vector que va marcando los nodos que ya estan finalizados y
+que nunca mas se deben volver a procesar. (OJO EN LA VERSION SIN
+HEAP que si o si es necesario el USO de este VECTOR). Esto se
+debe a que a veces en la cola de prioridad se meten varias
+versiones de distancia del mismo nodo, por si eventualmente por
+un camino se mejoro la distancia, pero la distancia anterior que
+era mas grande aun sigue en la cola.
+Este vector de marcados se usa en este caso, para ir descartando
+estos elementos de la cola, se saca un elemento de la cola y si
+resulta que el nodo ya esta finalizado quiere decir que esta
+distancia debe ser peor que con el que se finalizo el nodo.
+Por que el otro se saco antes de la cola entonces debio ser menor.
+
+El problema esta en los grafos que tienen arcos con pesos
+negativos(otra vez esos malditos), todo funciona bien hasta que de
+la nada un arco con un peso negativo muy grande modifica un nodo
+que ya estaba marcado como finalizado.
+
+Si el grafo  no tiene ciclos negativos, entonce es posible encontrar
+distancias correctas para cada nodo.
+
+Ejemplo:
+               4
+        1------------>2
+        |             |
+        |             |
+       2|             |6
+        |             |
+        v             v
+  5<----3<------------4
+     1        -9
+Lanzando dijkstra desde el nodo 1 el problema se encuentra en el
+nodo 3.
+ - primero procesa el nodo 1, marca como terminado el nodo 1 y
+   relaja a sus vecinos 2, y 3
+ - el nodo mas cercano es el 3 con distancia 2, marca como terminado
+   al nodo 3 y relaja a sus vecinos 5 con distancia 3.
+ - el nodo mas cercano sin terminar es el nodo 5 con distancia 3, lo
+   marca y procesa a sus vecinos(ninguno en este caso)
+ - luego marca y procesa el nodo 2 con distancia 4
+ - luego marca y procesa el nodo 4 con distancia 10, pero aqui
+   aparece un arco salvaje con peso negativo que hace que la
+   distancia hacia 3 sea 1. Segun la implementación actualiza la
+   distancia hacia 3 con 1 o no.
+ - busca nodos sin procesar pero no encuentra ninguno, aunque el
+   nodo 3 mejoro su distancia como ya esta marcado como terminado,
+   no procesara a sus vecinos que en este caso el 5 deberia
+   actualizarse a una distancia 2, pero se queda con distancia 3.
+   
+Implementición
+--------------
+En un grafo con arcos con peso => 0 no existe ningun problema.
+Pero en un grafo con pesos negativos puede fallar.
+En vez del vector de marcados se puede verificar que la distancia
+del nodo que estamos sacando de la cola es mayor que el que ya
+tenemos guardado en el vector de distancias, si es asi entonces
+este es un arco peor, que de seguro ya procesamos los vecinos
+del nodo con la otra distancia que es menor que debimos ya haber
+sacado al ser menor.
+
+
+
+Ver que arcos u-v pertenecen al camino minimo entre S y T
+=========================================================
+
+Sea D(X,Y) la distancia de la ruta mas corta que va de X a Y.
+Sea W(X,Y) el peso del arco que va de X a Y.
+Entonces un arco u-v sea dirigido o no, pertenece a un camino
+minimo entre S y T si:
+         D(S,u) + W(u,v) + D(v,T)  == D(S,T)
+
+Implementación:
+--------------
+Podemos lanzar un Dijkstra desde S en el grafo original, y otro
+desde T en el grafo invertido(arcos invertidos) y guardarnos los
+dos vectores de distancias. Y revisar todos los arcos y ver si
+cumplen la propiedad
+
+
+Ver por que arcos pasan todos los caminos minimos entre S y T
+=============================================================
+Existen varias formas:
+
+1)
+Facil de implementar pero propenso a overflow (se puede usar
+MOD pero las respuestas podrian ser incorrectas)
+
+Sea CC(X,Y) la cantidad de caminos minimos que van de X a Y.
+
+Entonces por un arco u-v pasan todos los caminos minimos entre
+S y T si:
+
+  1°) El arco u-v pertenece a un camino minimo
+  2°) CC(S,u) * CC(v,T) == CC(S,T)
+
+CC(S,u) * CC(v,T) ???
+---------------------
+Sea A = CC(S,u). (Nro. de caminos de longitud minima para
+                  llegar de S a u)
+Sea B = CC(v,T). (Nro. de caminos de longitud minima para
+                  llegar de v a T)
+Por cada opción de camino en A llego de S a u, luego recorro el
+arco u-v y de v puedo llegar a T por cualquiera de las B
+posibilidades.
+Esto es como sumar B, A veces. Y nos queda:
+    A*B = Nro de caminos MINIMOS de S a T que estrictamente pasan
+          por el arco u-v
+
+
+Demostración(O algo parecido)
+-----------------------------
+Se puede demostrar de la siguiente manera:
+El primer punto es ovio, por que con eso sabemos que por el
+arco pasan por lo menos un camino minimo.
+El segundo punto no es tan ovio. Imaginemos que la formula
+no se cumple. Entonces CC(S,T) deberia ser mas grande, por que
+estoy diciendo que por este arco no estan pasando todos los
+caminos minimos, que deben existir otros caminos minimos que no
+estan pasando por u-v, este hecho incrementa el numero de
+caminos de S hacia T.
+Esto es:
+
+CC(S,T) = (Caminos que pasan por u-v) + (Caminos que NO pasan por u-v)
+
+Entonces al ser exactamente igual, esta sucediendo que:
+         (Caminos que NO pasan por u-v) = 0
+Esto nos dice que todos los caminos estan pasando por u-v,
+que u-v es como un CUELLO DE BOTELLA.
+
+Implementación
+--------------
+Se puede contar la cantidad de caminos minimos de varias formas:
+-Una es armando un DAG con solo los arcos que pertenecen aun camino
+minimo, y con DP contar la cantidad de caminos terminan en T, que ya
+serian minimos. Y en el DAG invertido la cantidad de caminos que
+terminan en S.(O algo así)
+
+-En el mismo dijkstra en cada nodo(del dijkstra, no del grafo)
+almacenar la cantidad de caminos que con la cual se llego con la
+distancia actual, si por otro camino se logra llegar con la misma
+distancia, entonces simplemente le sumaria caminos y se deberia
+volver a meter a la cola para propagar a sus vecinos. Y hacer lo
+mismo para el grafo invertido.
+
+Warning
+-------
+La principal desventaja de este aproach es que el numero de
+caminos podria ser demasiado grande para caber en un long long y no
+se podrian comparar la formula.
+Se pueden usar operaciones MOD un primo muy grande, pero, se pueden
+generar casos que rompan esto.
+
+
+2)
+Un poco largo de implementar pero correcto.
+Sea CC(X,Y) la cantidad de caminos minimos que van de X a Y.
+
+Entonces por un arco u-v pasan todos los caminos minimos entre
+S y T si:
+
+  1°) El arco u-v pertenece a un camino minimo
+  2°) El arco u-v es un puente en el grafo no dirigido formado
+      por todos los arcos que pertenecen a un caminos minimos
+      entre S y T.
+      
+Demostración
+------------
+Igualmente el primer punto es igual al otro.
+Para este 2° punto, como en el nuevo grafo los arcos representan
+parte de una ruta entre S y T, si sacamos este arco del grafo
+lo unico que desconectaria seria un componente en el que estaria
+S y otro componente en el que estaria T. Entonces todos lo caminos
+en este grafo de caminos minimos estan pasando por ese arco.
+Si no es puente entonces existe otro lado por el cual aun se puede
+llegar de S a T(aun estan en un solo componente), entonce no todos
+los caminos pasan por el arco.
+
+Warning
+-------
+Cuidado con los MULTIARCOS.
+Si entre un par de nodos X, Y existe varios arcos(con pesos iguales o
+distintos). Ninguno de ellos es puente, se consideran como arcos distintos.
+Y si quito uno, el componente sigue conectado por el/los otros que
+une el mismo par de vertices.
+
+Implementación
+==============
+Se puede armar otro grafo con todos los arcos que pertencen a un
+camino minimo(poner el arco bidireccional en el nuevo grafo) y
+luego hacer correr un algoritmo para detectar puentes en grafos,
+como ser Tarjan.
+Otra vez mas, cuidado con los arcos repetidos Ej.:
+             1->2 con peso 1
+             1->2 con peso 1 (arco repetido)
+El algoritmo de Tarjan, detectara que uno de ellos si es puente,
+pero no es cierto.
+Se pueden meter en un mapa de map<arco, int> para contarlos.
+

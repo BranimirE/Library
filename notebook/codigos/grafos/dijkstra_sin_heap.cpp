@@ -3,10 +3,12 @@
 #include<algorithm>
 using namespace std;
 
-const int INF = 1000000000;
+const int INF = 1000000000;//Cuidado con el overflow en la relajacion
 const int MAXN = 1000;
 
 int n, m;
+//Ya que el algoritmo igual queda O(V^2)
+//Es mas facil usar una matriz de adyaciencia
 int v[MAXN], d[MAXN], G[MAXN][MAXN];
 
 int main() {
@@ -22,8 +24,10 @@ int main() {
   memset(v, 0, sizeof(v));
   for(int i = 0; i < n; i++) d[i] = (i==0 ? 0 : INF);
   for(int i = 0; i < n; i++) {
-    int x, m = INF;
-    for(int y = 0; y < n; y++) if(!v[y] && d[y]<=m) m = d[x=y];
+    int x = -1, m = INF;
+    for(int y = 0; y < n; y++)
+      if(!v[y] && d[y]<=m) m = d[x=y];
+    if (x == -1) break;
     v[x] = 1;
     for(int y = 0; y < n; y++) d[y] = min(d[y], d[x] + G[x][y]);
   }
