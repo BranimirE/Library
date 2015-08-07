@@ -77,8 +77,8 @@ sacado al ser menor.
 
 
 
-Ver que arcos u-v pertenecen al camino minimo entre S y T
-=========================================================
+Ver que arcos u-v pertenecen a almenos un camino minimo entre S y T
+===================================================================
 
 Sea D(X,Y) la distancia de la ruta mas corta que va de X a Y.
 Sea W(X,Y) el peso del arco que va de X a Y.
@@ -93,8 +93,14 @@ desde T en el grafo invertido(arcos invertidos) y guardarnos los
 dos vectores de distancias. Y revisar todos los arcos y ver si
 cumplen la propiedad
 
+Ver que nodos u pertenecen a almenos un camino minimo entre S y T
+=================================================================
+En el fondo es lo mismo que como si el nodo fuera un arco
+podemos representar el nodo u como un arco (u-u)
+Y todo lo dicho para arcos se aplica.
 
-Ver por que arcos pasan todos los caminos minimos entre S y T
+
+Ver por que arcos pasan TODOS los caminos minimos entre S y T
 =============================================================
 Existen varias formas:
 
@@ -213,3 +219,15 @@ El algoritmo de Tarjan, detectara que uno de ellos si es puente,
 pero no es cierto.
 Se pueden meter en un mapa de map<arco, int> para contarlos.
 
+
+
+
+Ver por que nodos pasan TODOS los caminos minimos entre S y T
+=============================================================
+Igual que en el anterior caso:
+Para la primera forma podemos representar el nodo como un
+arco (u-u) y todo se aplica.
+
+(aun sin demostrar)
+Para la segunda forma en vez de buscar los puentes, podemos buscar
+los puntos de articulación.
